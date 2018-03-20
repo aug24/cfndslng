@@ -3,7 +3,7 @@
 Requires:
 
   * ruby
-  * cfndsl
+  * [cfndsl](https://github.com/cfndsl/cfndsl)
 
 Optional:
 
