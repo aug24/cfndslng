@@ -4,7 +4,10 @@ Requires:
 
   * ruby
   * cfndsl
-  * json2yaml
+
+Optional:
+
+  * [json2yaml](https://www.npmjs.com/package/json2yaml) if you like yaml output
 
 # Implementation
 
