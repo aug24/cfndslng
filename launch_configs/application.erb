@@ -1,0 +1,82 @@
+#!/bin/bash
+
+export DEBIAN_FRONTEND=noninteractive
+
+# Install jq and aws cli
+apt-get update
+apt-get install jq -qy
+apt install awscli -qy
+
+# Find my instance id
+id=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
+
+# Find my availablity zone
+az=$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone)
+
+# Find my region
+rg=${az::-1}
+
+# Find the ASG I'm in
+asg=$(aws --region $rg ec2 describe-instances --instance-id $id | jq -r ".Reservations[].Instances[]|select(.InstanceId==\"$id\")|.Tags[]|select(.Key==\"aws:autoscaling:groupName\")|.Value") 
+
+# Find the ASG's logical name
+logicalname=$(aws --region $rg autoscaling describe-auto-scaling-groups --auto-scaling-group-name $asg | jq -r ".AutoScalingGroups[].Tags[]|select(.Key==\"aws:cloudformation:logical-id\")|.Value") 
+
+# Find the stack name
+stackname=$(aws --region $rg autoscaling describe-auto-scaling-groups --auto-scaling-group-name $asg | jq -r ".AutoScalingGroups[].Tags[]|select(.Key==\"aws:cloudformation:stack-name\")|.Value")
+
+# Find the version tag on my asg
+version=$(aws --region $rg autoscaling describe-auto-scaling-groups --auto-scaling-group-name $asg | jq -r ".AutoScalingGroups[].Tags[]|select(.Key==\"Version\")|.Value") 
+
+# Find the application tag on my asg
+application=$(aws --region $rg autoscaling describe-auto-scaling-groups --auto-scaling-group-name $asg | jq -r ".AutoScalingGroups[].Tags[]|select(.Key==\"Application\")|.Value") 
+
+# Debug info:
+cat <<EOF
+id=$id
+az=$az
+rg=$rg
+asg=$asg 
+logicalname=$logicalname 
+stackname=$stackname
+version=$version 
+application=$application 
+EOF
+
+
+
+# Hack: install ruby
+apt-get install ruby -qy
+
+
+# Hack: install sinatra gem
+gem install sinatra
+
+
+
+
+# Copy in .deb file using tags
+aws s3 cp s3://tcs-repo/${application}_${version}_amd64.deb /root
+
+# Install application
+dpkg -i /root/${application}_${version}_amd64.deb
+
+# Start application
+/etc/init.d/${application} start
+
+# Sleep 60
+sleep 60
+
+#Assume failure, then check for success
+state=FAILURE
+
+# Signal I'm healthy if application is still up and returning 200 on the healthcheck
+if (/etc/init.d/${application} status); then
+  responsecode=$(curl -s -o /dev/null -w "%{http_code}" http://localhost/healthcheck)
+  if [[ $responsecode -eq 200 ]]; then
+    state=SUCCESS
+  fi
+fi
+
+aws --region eu-west-1 cloudformation signal-resource --stack-name $stackname --logical-resource-id $logicalname --unique-id $id --status $state
+

@@ -1,0 +1,61 @@
+# frozen_string_literal: true
+
+CfndslNg.add do
+  def autoscaling_group(name='')
+#    auto_scale_io
+#    auto_scale_cpu
+
+    Parameter(name + "PrivateSubnets") {
+      Description "Subnet IDs in which the instances should be created"
+      Type "CommaDelimitedList"
+    }
+
+    Parameter(name + "MinSize") {
+      Description "Min Size of Scaling Group"
+      Type "String"
+    }
+
+    Parameter(name + "MaxSize") {
+      Description "Max Size of Scaling Group"
+      Type "String"
+    }
+
+    Parameter(name + "Version") {
+      Description "Application Version"
+      Type "String"
+    }
+    
+    Parameter(name + "Application") {
+      Description "Application Name"
+      Type "String"
+    }
+    
+    Resource(name  + 'ASG') do
+      Type "AWS::AutoScaling::AutoScalingGroup"
+      Property("LaunchConfigurationName", Ref(name + "LaunchConfig"))
+      Property("LoadBalancerNames", [ Ref("ELB") ] )
+      Property("MinSize",  Ref(name + "MinSize"))
+      Property("MaxSize",  Ref(name + "MaxSize"))
+      Property("TerminationPolicies", [ "OldestInstance" ])
+      Property("HealthCheckGracePeriod", 900)
+      Property("VPCZoneIdentifier", Ref(name + "PrivateSubnets") )
+      Property("MetricsCollection", [ { "Granularity" => "1Minute" } ] )
+      Property("Tags", 
+        [
+          { 
+            "Key"   => 'Version', 
+            "Value" => Ref(name + "Version"), 
+            "PropagateAtLaunch" => TRUE 
+          },
+          { 
+            "Key"   => 'Application', 
+            "Value" => Ref(name + "Application"), 
+            "PropagateAtLaunch" => TRUE 
+          },
+        ] 
+      )
+    end
+  end
+end
+
+

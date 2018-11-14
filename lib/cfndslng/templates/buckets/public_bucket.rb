@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
 CfndslNg.add do
-  def public_bucket
+  def public_bucket(name='')
 
-    Parameter("BucketName") {
+    Parameter(name + 'BucketName') {
       Description "The name of the bucket"
       Type "String"
     }
 
-    Resource("Bucket") do
+    Resource(name + "Bucket") do
       Type 'AWS::S3::Bucket'
-      Property('BucketName', Ref('BucketName'))
+      Property('BucketName', Ref(name + 'BucketName'))
     end
 
   end
