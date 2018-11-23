@@ -6,23 +6,27 @@
 
 CfndslNg.add do
   
-  def launch_template(file:)
-    file = File.open(file + ".erb", "rb")
-    file.read
+  def launch_template(files:)
+    template = ''
+    files.each { |file| 
+      file = File.open(file + ".erb", "rb")
+      template += (file.read + "\n")
+    }
+    template
   end
  
 
-  def launch_config(name='', volume_size=8, template='launch_template')
+  def launch_config(name='', volume_size=8, templates=['basic'])
 
     Parameter(name + 'KeyName') do
       Description 'The name of the EC2 Keypair with which to create instances'
       Default 'launch'
-      Type 'String'
+      Type 'AWS::EC2::KeyPair::KeyName'
     end
 
     Parameter(name + "Ami") {
       Description "Amazon Machine Image"
-      Type "String"
+      Type "AWS::EC2::Image::Id"
     }
 
     Parameter(name + "InstanceType") {
@@ -67,7 +71,7 @@ CfndslNg.add do
       ])
       Property('AssociatePublicIpAddress', 'True' )
       Property('UserData', FnBase64(
-        FnJoin( "\n#", [ launch_template(file: template), Ref(name + "Version")] )
+        FnJoin( "\n#", [ launch_template(files: templates), Ref(name + "Version")] )
       ))
         
     end

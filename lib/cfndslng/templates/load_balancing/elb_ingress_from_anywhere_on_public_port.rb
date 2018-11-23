@@ -4,7 +4,7 @@ CfndslNg.add do
   def elb_ingress_from_anywhere_on_public_port
 
     Parameter("VpcId") {
-      Type "String"
+      Type "AWS::EC2::VPC::Id"
     }
 
     Resource("SGELBApp" ) {

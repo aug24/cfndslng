@@ -7,22 +7,25 @@ CfndslNg.add do
 
     Parameter(name + "PrivateSubnets") {
       Description "Subnet IDs in which the instances should be created"
-      Type "CommaDelimitedList"
+      Type "List<AWS::EC2::Subnet::Id>"
     }
 
     Parameter(name + "MinSize") {
       Description "Min Size of Scaling Group"
       Type "String"
+      AllowedPattern "[1-9][0-9]*"
     }
 
     Parameter(name + "MaxSize") {
       Description "Max Size of Scaling Group"
       Type "String"
+      AllowedPattern "[1-9][0-9]*"
     }
 
     Parameter(name + "Version") {
       Description "Application Version"
       Type "String"
+      AllowedPattern "[0-9\.]+"
     }
     
     Parameter(name + "Application") {
