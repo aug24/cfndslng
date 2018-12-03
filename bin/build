@@ -1,3 +1,6 @@
 #!/bin/bash
 
-cfndsl -bp $1 
+mkdir -p target
+cd lib; find cfndslng/templates -type f | awk "{print \"require '\" \$1 \"'\"}" > cfndslng/templates.rb; cd - > /dev/null
+
+cfndsl -bp src/$1.rb > target/$1.cfn
