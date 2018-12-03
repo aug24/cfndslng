@@ -1,0 +1,65 @@
+# Install tooling
+apt-get install -y gnupg curl debian-archive-keyring apt-transport-https
+###################################################################################################################
+
+
+
+# Gitlab
+gpg_key_url="https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey"
+curl -L "${gpg_key_url}" 2> /dev/null | apt-key add - &>/dev/null
+
+cat > /etc/apt/sources.list.d/gitlab_gitlab-ce.list <<EOF
+deb https://packages.gitlab.com/gitlab/gitlab-ce/ubuntu/ bionic main
+deb-src https://packages.gitlab.com/gitlab/gitlab-ce/ubuntu/ bionic main
+EOF
+
+apt-get update
+apt-get install -y gitlab-ce 
+apt-get install -y gitlab-runner
+
+sed -i "s/^nginx\['enable'\].*$/nginx['enable'] = false/" /etc/gitlab/gitlab.rb
+sed -i "s/^nginx\['listen_addresses'\].*$/nginx['listen_addresses'] = ['0.0.0.0']/" /etc/gitlab/gitlab.rb
+sed -i "s/^external_url .*$/external_url 'http:\/\/$dns'/" /etc/gitlab/gitlab.rb
+###################################################################################################################
+
+
+# Start gitlab services. 
+/usr/bin/gitlab-ctl reconfigure
+/usr/bin/gitlab-ctl restart
+###################################################################################################################
+
+
+# Ruby package tooling
+apt-get install -y ruby
+apt-get install -y ruby-dev
+apt-get install -y make      
+apt-get install -y gcc
+gem install fpm
+gem install bundler
+###################################################################################################################
+
+# Java package tooling
+apt-get install -y maven
+###################################################################################################################
+
+
+
+# Gitlab runner
+echo "You will need to register a gitlab runner for your project on the command line."
+echo "You can get the token from:"
+echo "http://$dns/admin/runners"
+
+cat <<EOF
+gitlab-runner register \
+  --non-interactive \
+  --url http://$dns/ \
+  --shell bash \
+  --executor shell \
+  --registration-token ADD_TOKEN HERE
+EOF
+###################################################################################################################
+
+
+# Signal success.
+state=SUCCESS
+

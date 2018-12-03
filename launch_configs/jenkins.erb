@@ -1,0 +1,16 @@
+gpg_key_url=https://pkg.jenkins.io/debian/jenkins.io.key
+
+curl -L "${gpg_key_url}" 2> /dev/null | apt-key add -
+
+cat >/etc/apt/sources.list.d/jenkins.list <<EOF
+deb http://pkg.jenkins.io/debian-stable binary/ 
+EOF
+
+apt-get update
+
+apt-get install openjdk-8-jdk -y
+apt-get install jenkins -y
+systemctl start jenkins.service
+
+aws --region eu-west-1 cloudformation signal-resource --stack-name $stackname --logical-resource-id $logicalname --unique-id $id --status SUCCESS
+
