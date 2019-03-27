@@ -19,3 +19,7 @@ CloudFormation {
   <templates>
 }
 ```
+
+# Build
+
+see bin/build and bin/build_yaml
