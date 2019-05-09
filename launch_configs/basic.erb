@@ -34,7 +34,7 @@ application=$(aws --region $rg autoscaling describe-auto-scaling-groups --auto-s
 elb=$(aws --region $rg autoscaling describe-auto-scaling-groups --auto-scaling-group-name $asg | jq -r '.AutoScalingGroups[].LoadBalancerNames[]')
 
 # Find the DNS
-dns=$(aws --region $rg elb describe-load-balancers --load-balancer-names justin-testing-ELB-BD22OFTC9G45 | jq -r '.LoadBalancerDescriptions[].DNSName')
+dns=$(aws --region $rg elb describe-load-balancers --load-balancer-names $elb | jq -r '.LoadBalancerDescriptions[].DNSName')
 
 # Debug info:
 cat <<EOF
