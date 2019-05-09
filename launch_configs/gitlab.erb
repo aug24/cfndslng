@@ -60,6 +60,20 @@ sudo apt install nodejs
 ###################################################################################################################
 
 
+gitlab-rails console production <<EOF
+user = User.where(id: 1).first
+puts user.email
+puts user.password
+user.password='password'
+user.password_confirmation='password'
+user.save!
+EOF
+
+sed -i "s|^external_url:.*|external_url: 'http://$dns/'|" /etc/gitlab/gitlab.rb
+gitlab-ctl reconfigure
+gitlab-ctl restart
+
+
 # Gitlab runner
 echo "You will need to register a gitlab runner for your project on the command line."
 echo "You can get the token from:"

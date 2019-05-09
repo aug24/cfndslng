@@ -16,7 +16,7 @@ CfndslNg.add do
   end
  
 
-  def launch_config(name='', volume_size=8, templates=['basic'])
+  def launch_config(name='', volume_size=8, templates=['launch_configs/basic'])
 
     Parameter(name + 'KeyName') do
       Description 'The name of the EC2 Keypair with which to create instances'
