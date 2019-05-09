@@ -9,8 +9,8 @@ gpg_key_url="https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey"
 curl -L "${gpg_key_url}" 2> /dev/null | apt-key add - &>/dev/null
 
 cat > /etc/apt/sources.list.d/gitlab_gitlab-ce.list <<EOF
-deb https://packages.gitlab.com/gitlab/gitlab-ce/ubuntu/ bionic main
-deb-src https://packages.gitlab.com/gitlab/gitlab-ce/ubuntu/ bionic main
+deb https://packages.gitlab.com/gitlab/gitlab-ce/ubuntu/ xenial main
+deb-src https://packages.gitlab.com/gitlab/gitlab-ce/ubuntu/ xenial main
 EOF
 
 apt-get update
@@ -42,6 +42,22 @@ gem install bundler
 apt-get install -y maven
 ###################################################################################################################
 
+
+
+# Docker package tooling
+apt-get install apt-transport-https ca-certificates curl software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+apt-get update
+apt-cache policy docker-ce
+apt-get install docker-ce
+###################################################################################################################
+
+
+# Node package tooling
+curl -sL https://deb.nodesource.com/setup_8.x | sudo bash -
+sudo apt install nodejs
+###################################################################################################################
 
 
 # Gitlab runner
