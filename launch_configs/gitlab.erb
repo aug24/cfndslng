@@ -56,7 +56,11 @@ apt-get install docker-ce
 
 # Node package tooling
 curl -sL https://deb.nodesource.com/setup_8.x | sudo bash -
-sudo apt install nodejs
+sudo apt-get install -y nodejs
+###################################################################################################################
+
+# PHP package tooling
+sudo apt-get install -y php
 ###################################################################################################################
 
 
@@ -72,21 +76,19 @@ EOF
 sed -i "s|^external_url:.*|external_url: 'http://$dns/'|" /etc/gitlab/gitlab.rb
 gitlab-ctl reconfigure
 gitlab-ctl restart
-
+systemctl enable gitlab-runsvdir
 
 # Gitlab runner
-echo "You will need to register a gitlab runner for your project on the command line."
-echo "You can get the token from:"
-echo "http://$dns/admin/runners"
+usermod -a -G docker gitlab-runner
 
-cat <<EOF
+echo "Gitlab::CurrentSettings.current_application_settings.runners_registration_token" | gitlab-rails console --environment=production | grep '"' | sed 's/"//g' > runner_registration_token
+
 gitlab-runner register \
   --non-interactive \
   --url http://$dns/ \
   --shell bash \
   --executor shell \
-  --registration-token ADD_TOKEN HERE
-EOF
+  --registration-token $(cat runner_registration_token)
 ###################################################################################################################
 
 
