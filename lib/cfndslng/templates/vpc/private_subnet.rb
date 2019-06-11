@@ -15,6 +15,7 @@ CfndslNg.add do
     Resource('PrivateSubnet' + name) do
       Type 'AWS::EC2::Subnet'
       Property('VpcId', Ref('VPC'))
+      Property('AvailabilityZone', FnJoin('', [ Ref('AWS::Region'), name.downcase ]))
       Property('CidrBlock', Ref('Subnet' + name + 'CIDR'))
       stacktag
     end
