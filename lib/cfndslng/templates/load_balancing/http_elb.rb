@@ -22,6 +22,13 @@ CfndslNg.add do
       Type "AWS::ElasticLoadBalancing::LoadBalancer"
       Property("CrossZone", true)
       Property("ConnectionDrainingPolicy", { "Enabled" => true, "Timeout" => "30" })
+      Property("HealthCheck" , {
+         "HealthyThreshold": 2,
+         "Interval": "30",
+         "Target": Ref("PingPath"),
+         "Timeout": 10,
+         "UnhealthyThreshold": 2
+      })
       Property("Listeners" , [
         {
           "LoadBalancerPort" => Ref("PublicPort"),
