@@ -46,5 +46,11 @@ CfndslNg.add do
           }
         })
     end
+
+    Resource(name + 'EC2InstanceProfile') do
+      Type 'AWS::IAM::InstanceProfile'
+        Property('Path', '/')
+        Property('Roles', [ Ref('EC2Role') ])
+    end
   end
 end
