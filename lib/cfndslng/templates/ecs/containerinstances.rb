@@ -20,7 +20,7 @@ CfndslNg.add do
       Description 'Name of an existing EC2 KeyPair to enable SSH access to the ECS instances.'
     }
 
-    Resource(name + 'ContainerInstances') do
+    Resource(name + 'LaunchConfig') do
       Type 'AWS::AutoScaling::LaunchConfiguration'
         Property('ImageId', Ref('EcsAmi'))
         Property('AssociatePublicIpAddress', true)
