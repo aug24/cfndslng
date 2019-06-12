@@ -14,7 +14,6 @@ CfndslNg.add do
     }
     template
   end
- 
 
   def launch_config(name='', volume_size=8, templates=['launch_configs/basic'])
 

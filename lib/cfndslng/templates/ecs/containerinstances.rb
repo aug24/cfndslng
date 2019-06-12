@@ -1,7 +1,27 @@
 # frozen_string_literal: true
   
+# Usage
+#
+# AssociatePublicIpAddress is not specified below.  Use public_launch_config and private_launch_config.
+
 CfndslNg.add do
+
+  def launch_template(files:)
+    template = ''
+    files.each { |file| 
+      file = File.open(file + ".erb", "rb")
+      template += (file.read + "\n")
+    }
+    template
+  end
+ 
   def containerinstances(name='')
+
+    Parameter(name + 'KeyName') {
+      Description 'The name of the EC2 Keypair with which to create instances'
+      Default 'launch'
+      Type 'AWS::EC2::KeyPair::KeyName'
+    }
 
     Parameter(name + 'EcsAmi') {
       Description 'ECS-Optimized AMI ID'
@@ -13,11 +33,6 @@ CfndslNg.add do
       Description 'EC2 instance type'
       Type 'String'
       Default 't2.micro'
-    }
-
-    Parameter(name + 'KeyName') {
-      Type 'AWS::EC2::KeyPair::KeyName'
-      Description 'Name of an existing EC2 KeyPair to enable SSH access to the ECS instances.'
     }
 
     Resource(name + 'LaunchConfig') do
@@ -47,10 +62,23 @@ CfndslNg.add do
         })
     end
 
+    Resource(name + 'InstanceRole') do
+      Type 'AWS::IAM::Role'
+      Property('AssumeRolePolicyDocument', {
+        "Id"        => "EIPManagementRole",
+        "Version" => "2012-10-17",
+        "Statement" => {
+          "Effect" => "Allow",
+          "Principal" => {"Service" => "ec2.amazonaws.com"},
+          "Action" => "sts:AssumeRole"
+        }
+      })
+    end
+
     Resource(name + 'EC2InstanceProfile') do
       Type 'AWS::IAM::InstanceProfile'
         Property('Path', '/')
-        Property('Roles', [ Ref('EC2Role') ])
+        Property('Roles', [ Ref('InstanceRole') ])
     end
   end
 end
