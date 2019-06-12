@@ -10,7 +10,7 @@ CfndslNg.add do
             "TargetGroupArn": Ref('Target')
           }
         ])
-        Property('LoadBalancerArn', Ref('Alb') )
+        Property('LoadBalancerArn', Ref('LoadBalancer') )
         Property('Port', Ref('PublicPort') )
         Property('Protocol', 'HTTP')
     end

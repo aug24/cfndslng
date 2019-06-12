@@ -13,9 +13,9 @@ CfndslNg.add do
       Type "List<AWS::EC2::Subnet::Id>"
     }
 
-    Resource(name + 'Alb') do
+    Resource(name + 'LoadBalancer') do
       Type "AWS::ElasticLoadBalancingV2::LoadBalancer"
-        Property('Name', 'Alb')
+        Property('Name', 'LoadBalancer')
         Property('Scheme', 'internet-facing')
         Property('LoadBalancerAttributes', [
           { 
@@ -24,7 +24,7 @@ CfndslNg.add do
           }
         ])
         Property('Subnets', Ref('PrivateSubnets'))
-        Property('SecurityGroups', [ Ref('SGELBApp') ])
+        Property('SecurityGroups', [ Ref('SGLoadBalancerToApp') ])
     end
 
     Resource(name + 'LoadBalancerListener') do
@@ -33,14 +33,14 @@ CfndslNg.add do
         'Type': 'forward',
         'TargetGroupArn': Ref( name + 'Target' ) }]
       )
-      Property( 'LoadBalancerArn', Ref( name + 'Alb' ))
+      Property( 'LoadBalancerArn', Ref( name + 'LoadBalancer' ))
       Property( 'Port', Ref('PublicPort') )
       Property( 'Protocol', 'HTTP')
     end
 
-    Output('Alb') do
+    Output('LoadBalancer') do
       Description 'ALB DNS'
-      Value(FnGetAtt( "Alb", "DNSName" ))
+      Value(FnGetAtt( "LoadBalancer", "DNSName" ))
     end
 
   end

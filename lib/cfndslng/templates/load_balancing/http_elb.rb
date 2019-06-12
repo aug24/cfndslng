@@ -18,7 +18,7 @@ CfndslNg.add do
       Type "String"
     end
 
-    Resource("ELB") do
+    Resource("LoadBalancer") do
       Type "AWS::ElasticLoadBalancing::LoadBalancer"
       Property("CrossZone", true)
       Property("ConnectionDrainingPolicy", { "Enabled" => true, "Timeout" => "30" })
@@ -37,7 +37,7 @@ CfndslNg.add do
         }
       ])
       Property('Subnets', Ref('PrivateSubnets'))
-      Property("SecurityGroups", [ FnGetAtt("SGELBApp", "GroupId") ])
+      Property("SecurityGroups", [ FnGetAtt("SGLoadBalancerToApp", "GroupId") ])
     end
 
   end

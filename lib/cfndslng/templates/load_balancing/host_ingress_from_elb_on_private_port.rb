@@ -16,7 +16,7 @@ CfndslNg.add do
           "IpProtocol" => "TCP",
           "FromPort" => Ref("PrivatePort"),
           "ToPort" => Ref("PrivatePort"),
-          "SourceSecurityGroupId" =>  FnGetAtt("SGELBApp", "GroupId")
+          "SourceSecurityGroupId" =>  FnGetAtt("SGLoadBalancerToApp", "GroupId")
         }
       ])
     end

@@ -14,7 +14,7 @@ CfndslNg.add do
         Property('Dimensions', [
           {
             "Name": "LoadBalancer",
-            "Value": FnGetAtt( 'Alb', 'LoadBalancerFullName' )
+            "Value": FnGetAtt( 'LoadBalancer', 'LoadBalancerFullName' )
           }
         ])
         Property('ComparisonOperator', 'GreaterThanThreshold')
