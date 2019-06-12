@@ -5,7 +5,7 @@ CfndslNg.add do
 
     Resource(name + 'ReadSSMPolicy') {
       Type 'AWS::IAM::Policy'
-      Property('PolicyName', name + 'SSMPolicy')
+      Property('PolicyName', name + 'ReadSSMPolicy')
       Property('PolicyDocument', {
         "Id"        => "Policy",
         "Statement" => [

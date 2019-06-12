@@ -4,7 +4,7 @@ CfndslNg.add do
   def ecsautoscalinggroup(name='')
     Resource(name + 'EcsAutoscalingGroup') do
       Type 'AWS::AutoScaling::AutoScalingGroup'
-        Property('VPCZoneIdentifier', Ref('SubnetId') )
+        Property('VPCZoneIdentifier', Ref('PrivateSubnets') )
         Property('LaunchConfigurationName', Ref('ContainerInstances') )
         Property('MinSize', '1')
         Property('MaxSize', Ref('MaxSize') )

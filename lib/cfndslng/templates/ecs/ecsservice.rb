@@ -22,7 +22,7 @@ CfndslNg.add do
           {
             "ContainerName":  Ref('ApplicationName'),
             "ContainerPort":  Ref('ContainerPort'),
-            "TargetGroupArn": Ref('EcsTaskGroup')
+            "TargetGroupArn": Ref('Target')
           }
         ])
         Property('Role', Ref('EcsServiceRole'))

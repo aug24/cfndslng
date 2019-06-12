@@ -2,7 +2,7 @@
   
 CfndslNg.add do
   def ecstaskgroup(name='')
-    Parameter(name + 'HostPort') do
+    Parameter(name + 'PublicPort') do
       Type 'Number'
       Default 80
       Description 'Port on which the host listens, forwarded to ContainerPort'
@@ -13,7 +13,7 @@ CfndslNg.add do
       Description 'Select a VPC that allows instances to access the Internet.'
     end
 
-    Parameter(name + 'SubnetId') do
+    Parameter(name + 'PrivateSubnets') do
       Type 'List<AWS::EC2::Subnet::Id>'
       Description 'Select at two subnets in your selected VPC.'
     end
@@ -30,7 +30,7 @@ CfndslNg.add do
       Description 'Preferred number of instances'
     end
 
-    Resource(name + 'EcsTaskGroup') do
+    Resource(name + 'Target') do
       Type 'AWS::ElasticLoadBalancingV2::TargetGroup'
         Property('HealthCheckIntervalSeconds', 10)
         Property('HealthCheckPath', '/')
@@ -38,7 +38,7 @@ CfndslNg.add do
         Property('HealthCheckTimeoutSeconds', 5)
         Property('HealthyThresholdCount', 2)
         Property('Name', 'EcsTaskGroup')
-        Property('Port',  Ref('HostPort'))
+        Property('Port',  Ref('PublicPort'))
         Property('Protocol', 'HTTP')
         Property('UnhealthyThresholdCount', 2)
         Property('VpcId', Ref('VpcId'))

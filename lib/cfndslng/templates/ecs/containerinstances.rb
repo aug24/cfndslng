@@ -24,7 +24,7 @@ CfndslNg.add do
       Type 'AWS::AutoScaling::LaunchConfiguration'
         Property('ImageId', Ref('EcsAmi'))
         Property('AssociatePublicIpAddress', true)
-        Property('SecurityGroups', [ Ref('EcsSecurityGroup') ])
+        Property('SecurityGroups', [ Ref('SGELBApp') ])
         Property('InstanceType', Ref('InstanceType'))
         Property('IamInstanceProfile', Ref('EC2InstanceProfile'))
         Property('KeyName', Ref('KeyName'))

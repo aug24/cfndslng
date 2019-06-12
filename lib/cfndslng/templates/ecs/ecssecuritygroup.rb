@@ -2,7 +2,7 @@
   
 CfndslNg.add do
   def ecssecuritygroup(name='')
-    Resource(name + 'EcsSecurityGroup') do
+    Resource(name + 'SGELBApp') do
       Type 'AWS::EC2::SecurityGroup'
         Property('GroupDescription', 'ECS Security Group')
         Property('VpcId', Ref('VpcId'))
@@ -10,11 +10,11 @@ CfndslNg.add do
 
     Resource(name + 'EcsSecurityGroupALBports') do
       Type 'AWS::EC2::SecurityGroupIngress'
-        Property('GroupId', Ref('EcsSecurityGroup') )
+        Property('GroupId', Ref('SGELBApp') )
         Property('IpProtocol', 'tcp')
         Property('FromPort', '31000')
         Property('ToPort', '61000')
-        Property('SourceSecurityGroupId', Ref('EcsSecurityGroup') )
+        Property('SourceSecurityGroupId', Ref('SGELBApp') )
     end
   end
 end

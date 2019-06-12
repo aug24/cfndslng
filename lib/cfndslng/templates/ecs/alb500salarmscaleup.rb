@@ -2,7 +2,7 @@
   
 CfndslNg.add do
   def alb500salarmscaleup(name='')
-    Resource(name + 'ALB500sAlarmScaleUp') do
+    Resource(name + 'Alb500sAlarmScaleUp') do
       Type 'AWS::CloudWatch::Alarm'
         Property('EvaluationPeriods', '1')
         Property('Statistic', 'Average')
@@ -14,7 +14,7 @@ CfndslNg.add do
         Property('Dimensions', [
           {
             "Name": "LoadBalancer",
-            "Value": FnGetAtt( 'EcsAlb', 'LoadBalancerFullName' )
+            "Value": FnGetAtt( 'Alb', 'LoadBalancerFullName' )
           }
         ])
         Property('ComparisonOperator', 'GreaterThanThreshold')

@@ -4,10 +4,10 @@ CfndslNg.add do
   def ecssecuritygrouphttpinbound(name='')
     Resource(name + 'EcsSecurityGroupHTTPinbound') do
       Type 'AWS::EC2::SecurityGroupIngress'
-        Property('GroupId', Ref('EcsSecurityGroup') )
+        Property('GroupId', Ref('SGELBApp') )
         Property('IpProtocol', 'tcp')
-        Property('FromPort',  Ref('HostPort') )
-        Property('ToPort',  Ref('HostPort') )
+        Property('FromPort',  Ref('PublicPort') )
+        Property('ToPort',  Ref('PublicPort') )
         Property('CidrIp', '0.0.0.0/0')
     end
   end

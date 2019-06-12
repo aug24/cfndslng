@@ -7,7 +7,7 @@ CfndslNg.add do
         Property('Actions', [
           {
             "Type": "forward",
-            "TargetGroupArn": Ref('EcsTaskGroup')
+            "TargetGroupArn": Ref('Target')
           }
         ])
         Property('Conditions', [

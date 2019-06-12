@@ -7,11 +7,11 @@ CfndslNg.add do
         Property('DefaultActions', [
           {
             "Type": "forward",
-            "TargetGroupArn": Ref('EcsTaskGroup')
+            "TargetGroupArn": Ref('Target')
           }
         ])
-        Property('LoadBalancerArn', Ref('EcsAlb') )
-        Property('Port', Ref('HostPort') )
+        Property('LoadBalancerArn', Ref('Alb') )
+        Property('Port', Ref('PublicPort') )
         Property('Protocol', 'HTTP')
     end
   end
