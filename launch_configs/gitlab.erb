@@ -83,7 +83,7 @@ usermod -a -G docker gitlab-runner
 
 echo "Gitlab::CurrentSettings.current_application_settings.runners_registration_token" | gitlab-rails console --environment=production | grep '"' | sed 's/"//g' > runner_registration_token
 
-sleep 20
+sleep 30
 
 gitlab-runner register \
   --non-interactive \
