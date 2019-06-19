@@ -24,6 +24,7 @@ CfndslNg.add do
       UpdatePolicy("AutoScalingReplacingUpdate", { "WillReplace" => true })
     }
 
+    #       "Resource" => FnJoin("/", [ Ref('AWS::StackName'), "*" ] )
     Resource("#{name}SignalResourcePolicy") do
       Type 'AWS::IAM::Policy'
       Property('PolicyName', "#{name}SignalResourcePolicy")
@@ -35,7 +36,7 @@ CfndslNg.add do
            "Action" => [
              "cloudformation:SignalResource",
            ],
-           "Resource" => FnJoin("/", [ Ref('AWS::StackName'), "*" ] )
+           "Resource" => "*" 
           }
         ],
         "Version"   => "2008-10-17"

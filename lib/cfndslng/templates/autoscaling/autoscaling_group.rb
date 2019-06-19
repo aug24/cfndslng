@@ -36,7 +36,7 @@ CfndslNg.add do
     Resource(name  + 'ASG') do
       Type "AWS::AutoScaling::AutoScalingGroup"
       Property("LaunchConfigurationName", Ref(name + "LaunchConfig"))
-      Property("LoadBalancerNames", [ Ref("LoadBalancer") ] )
+#      Property("LoadBalancerNames", [ Ref("LoadBalancer") ] )
       Property("MinSize",  Ref(name + "MinSize"))
       Property("MaxSize",  Ref(name + "MaxSize"))
       Property("TerminationPolicies", [ "OldestInstance" ])
