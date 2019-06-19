@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-# Usage
-#
-# AssociatePublicIpAddress is not specified below.  Use public_launch_config and private_launch_config.
-
 CfndslNg.add do
   def signal_resource_policy(name='')
 
@@ -15,6 +11,7 @@ CfndslNg.add do
         "Statement" => [
           {
             "Action" => [
+              "cloudformation:Describe",
               "cloudformation:SignalResource"
             ],
             "Effect"   => "Allow",
