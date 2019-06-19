@@ -15,8 +15,9 @@ CfndslNg.add do
     }
 
     Resource(name + 'EcsService') do
-      Type 'AWS::Ecs::Service'
-        Property('Cluster', Ref('EcsCluster'))
+      Type 'AWS::ECS::Service'
+        DependsOn ['Target', 'LoadBalancer', 'LoadBalancerListener']
+        Property('Cluster', Ref(name + 'EcsCluster'))
         Property('DesiredCount', '1')
         Property('LoadBalancers', [
           {
@@ -25,8 +26,8 @@ CfndslNg.add do
             "TargetGroupArn": Ref('Target')
           }
         ])
-        Property('Role', Ref('EcsServiceRole'))
-        Property('TaskDefinition', Ref('TaskDefinition'))
+        Property('Role', Ref(name + 'EcsServiceRole'))
+        Property('TaskDefinition', Ref(name + 'TaskDefinition'))
     end
   end
 end

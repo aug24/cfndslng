@@ -2,7 +2,7 @@
   
 CfndslNg.add do
   def ecsalblistenerrule(name='')
-    Resource(name + 'ECSAlbListenerRule') do
+    Resource(name + 'ECSLoadBalancerListenerRule') do
       Type 'AWS::ElasticLoadBalancingV2::ListenerRule'
         Property('Actions', [
           {
@@ -16,7 +16,7 @@ CfndslNg.add do
             "Values": [ "/" ]
           }
         ])
-        Property('ListenerArn', Ref('AlbListener'))
+        Property('ListenerArn', Ref('LoadBalancerListener'))
         Property('Priority', 1)
     end
   end

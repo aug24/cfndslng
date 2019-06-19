@@ -2,6 +2,12 @@
   
 CfndslNg.add do
   def ecsautoscalinggroup(name='')
+    Parameter(name + "Version") {
+      Description "Application Version"
+      Type "String"
+      AllowedPattern "[0-9\.]+"
+    }
+
     Resource(name + 'EcsAutoscalingGroup') do
       Type 'AWS::AutoScaling::AutoScalingGroup'
         Property('VPCZoneIdentifier', Ref('PrivateSubnets') )

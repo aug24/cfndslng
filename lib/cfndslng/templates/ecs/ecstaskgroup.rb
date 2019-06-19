@@ -18,12 +18,6 @@ CfndslNg.add do
       Description 'Select at two subnets in your selected VPC.'
     end
 
-    Parameter(name + 'MaxSize') do
-      Type 'Number'
-      Default '1'
-      Description 'Maximum number of instances that can be launched in your ECS cluster.'
-    end
-
     Parameter(name + 'DesiredCapacity') do
       Type 'Number'
       Default '1'
@@ -37,7 +31,7 @@ CfndslNg.add do
         Property('HealthCheckProtocol', 'HTTP')
         Property('HealthCheckTimeoutSeconds', 5)
         Property('HealthyThresholdCount', 2)
-        Property('Name', 'EcsTaskGroup')
+        #Property('Name', 'EcsTaskGroup')
         Property('Port',  Ref('PublicPort'))
         Property('Protocol', 'HTTP')
         Property('UnhealthyThresholdCount', 2)
