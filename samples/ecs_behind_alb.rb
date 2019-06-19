@@ -2,11 +2,8 @@
 require_relative '../lib/cfndslng.rb'
 
 CloudFormation {
-#   alb500salarmscaleup
-#   alblistener
    autoscalingrole
    launch_config("", '', templates=["launch_configs/basic", "launch_configs/container", "launch_configs/signal"])
-#   docker_launch_config
    http_alb
    ecsalblistenerrule
    autoscaling_group
@@ -15,14 +12,12 @@ CloudFormation {
    ecsservice
    ecsservicerole
    ecstaskgroup
-#   servicescalingpolicy
-#   servicescalingtarget
    taskdefinition
+
    host_ingress_from_elb_on_all_high_ports
    ecs_ami
 
    container_policy
-
    describe_instances_permission
    describe_asgs_permission
    describe_vpcs_permission
