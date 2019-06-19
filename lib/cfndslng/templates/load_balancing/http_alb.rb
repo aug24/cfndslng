@@ -15,7 +15,7 @@ CfndslNg.add do
 
     Resource(name + 'LoadBalancer') do
       Type "AWS::ElasticLoadBalancingV2::LoadBalancer"
-        Property('Name', 'LoadBalancer')
+        #Property('Name', 'LoadBalancer')
         Property('Scheme', 'internet-facing')
         Property('LoadBalancerAttributes', [
           { 
