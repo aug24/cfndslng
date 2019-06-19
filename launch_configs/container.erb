@@ -1,0 +1,6 @@
+
+cluster=$(aws --region eu-west-1 cloudformation describe-stack-resource --stack-name $stackname --logical-resource-id EcsCluster | jq -r '.StackResourceDetail.PhysicalResourceId')
+
+echo ECS_CLUSTER=$cluster >> /etc/ecs/ecs.config
+
+export state=SUCCESS

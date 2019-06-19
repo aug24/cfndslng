@@ -1,10 +1,15 @@
 #!/bin/bash
 
-export DEBIAN_FRONTEND=noninteractive
+[[ -f /usr/bin/yum ]] && [[ -x /usr/bin/yum ]] && INSTALLER=yum || INSTALLER=apt-get
 
 # Install jq and aws cli
-apt-get update
-apt-get install jq awscli -qy
+if [[ "$INSTALLER" == "apt-get" ]]; then 
+   export DEBIAN_FRONTEND=noninteractive
+   $INSTALLER update
+   $INSTALLER install jq awscli -y
+else
+   $INSTALLER install jq aws-cli -y
+fi
 
 # Find my instance id
 id=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)

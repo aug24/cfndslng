@@ -6,10 +6,10 @@ cat >/etc/apt/sources.list.d/jenkins.list <<EOF
 deb http://pkg.jenkins.io/debian-stable binary/ 
 EOF
 
-apt-get update
+$INSTALLER update
 
-apt-get install openjdk-8-jdk -y
-apt-get install jenkins -y
+$INSTALLER install openjdk-8-jdk -y
+$INSTALLER install jenkins -y
 systemctl start jenkins.service
 
 aws --region eu-west-1 cloudformation signal-resource --stack-name $stackname --logical-resource-id $logicalname --unique-id $id --status SUCCESS

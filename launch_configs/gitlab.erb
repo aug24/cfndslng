@@ -1,5 +1,5 @@
 # Install tooling
-apt-get install -y gnupg curl debian-archive-keyring apt-transport-https
+$INSTALLER install -y gnupg curl debian-archive-keyring apt-transport-https
 ###################################################################################################################
 
 
@@ -13,9 +13,11 @@ deb https://packages.gitlab.com/gitlab/gitlab-ce/ubuntu/ xenial main
 deb-src https://packages.gitlab.com/gitlab/gitlab-ce/ubuntu/ xenial main
 EOF
 
-apt-get update
-apt-get install -y gitlab-ce 
-apt-get install -y gitlab-runner
+if [[ "$INSTALLER" == "apt-get" ]]; then
+   $INSTALLER update
+   $INSTALLER install -y gitlab-ce 
+   $INSTALLER install -y gitlab-runner
+fi
 
 sed -i "s/^nginx\['enable'\].*$/nginx['enable'] = false/" /etc/gitlab/gitlab.rb
 sed -i "s/^nginx\['listen_addresses'\].*$/nginx['listen_addresses'] = ['0.0.0.0']/" /etc/gitlab/gitlab.rb
@@ -30,37 +32,39 @@ sed -i "s/^external_url .*$/external_url 'http:\/\/$dns'/" /etc/gitlab/gitlab.rb
 
 
 # Ruby package tooling
-apt-get install -y ruby
-apt-get install -y ruby-dev
-apt-get install -y make      
-apt-get install -y gcc
+$INSTALLER install -y ruby
+$INSTALLER install -y ruby-dev
+$INSTALLER install -y make      
+$INSTALLER install -y gcc
 gem install fpm
 gem install bundler
 ###################################################################################################################
 
 # Java package tooling
-apt-get install -y maven
+$INSTALLER install -y maven
 ###################################################################################################################
 
 
 
 # Docker package tooling
-apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+$INSTALLER install -y apt-transport-https ca-certificates curl software-properties-common
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-apt-get update
-apt-cache policy docker-ce
-apt-get install -y docker-ce
+if [[ "$INSTALLER" == "apt-get" ]]; then
+   apt-get update
+   apt-cache policy docker-ce
+   apt-get install -y docker-ce
+fi
 ###################################################################################################################
 
 
 # Node package tooling
 curl -sL https://deb.nodesource.com/setup_8.x | sudo bash -
-sudo apt-get install -y nodejs
+$INSTALLER install -y nodejs
 ###################################################################################################################
 
 # PHP package tooling
-sudo apt-get install -y php
+$INSTALLER install -y php
 ###################################################################################################################
 
 
