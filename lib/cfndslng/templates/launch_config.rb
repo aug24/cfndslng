@@ -59,15 +59,17 @@ CfndslNg.add do
       Property('SecurityGroups', [ FnGetAtt("SGHostApp", "GroupId") ] )
       Property('InstanceType', Ref(name + "InstanceType"))
       Property('IamInstanceProfile', Ref(name + "InstanceProfile"))
-      Property("BlockDeviceMappings", [
-        {
-         "DeviceName" => "/dev/sda1",
-         "Ebs" => {
-           "VolumeType" => "gp2",
-           "VolumeSize" => volume_size
-         }
-        }
-      ])
+      if volume_size != '' && volume_size > 0 then
+        Property("BlockDeviceMappings", [
+          {
+           "DeviceName" => "/dev/sda1",
+           "Ebs" => {
+             "VolumeType" => "gp2",
+             "VolumeSize" => volume_size
+           }
+          }
+        ])
+      end
       Property('AssociatePublicIpAddress', 'True' )
       Property('UserData', FnBase64(
         FnJoin( "\n#", [ launch_template(files: templates), Ref(name + "Version")] )
