@@ -6,25 +6,24 @@ CfndslNg.add do
       Type 'AWS::IAM::Policy'
       Property('PolicyName', name + 'ContainerPolicy')
       Property('PolicyDocument', {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Action": [
-                "ecs:CreateCluster",
-                "ecs:DeregisterContainerInstance",
-                "ecs:DiscoverPollEndpoint",
-                "ecs:Poll",
-                "ecs:RegisterContainerInstance",
-                "ecs:StartTelemetrySession",
-                "ecs:Submit*",
-                "logs:CreateLogStream",
-                "logs:PutLogEvents"
-              ],
-              "Resource": "*"
-            }
-          ]
-        }
+        "Id"        => "DeployECSPolicy",
+        "Statement" => [
+          {
+            "Effect": "Allow",
+            "Action" => [
+              "ecs:CreateCluster",
+              "ecs:DeregisterContainerInstance",
+              "ecs:DiscoverPollEndpoint",
+              "ecs:Poll",
+              "ecs:RegisterContainerInstance",
+              "ecs:StartTelemetrySession",
+              "ecs:Submit*",
+              "logs:CreateLogStream",
+              "logs:PutLogEvents"
+            ],
+            "Resource": "*"
+          }
+        ]
       })
       Property('Roles', [Ref(name + "InstanceRole")])
     end
