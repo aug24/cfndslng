@@ -1,0 +1,54 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Parameters": {
+    "Name": {
+      "Type": "String",
+      "Description": "Name of docker repo to be created"
+    }
+  },
+  "Resources": {
+    "EcsRepository": {
+      "Type": "AWS::ECR::Repository",
+      "Properties": {
+        "RepositoryName": {
+          "Ref": "Name"
+        },
+        "RepositoryPolicyText": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "AllowPushPull",
+              "Effect": "Allow",
+              "Action": [
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:BatchGetImage",
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:PutImage",
+                "ecr:InitiateLayerUpload",
+                "ecr:UploadLayerPart",
+                "ecr:CompleteLayerUpload",
+                "ecr:GetAuthorizationToken"
+              ],
+              "Principal": {
+                "AWS": [
+                  {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:aws:iam::",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":root"
+                      ]
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

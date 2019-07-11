@@ -1,0 +1,32 @@
+{
+  "AWSTemplateFormatVersion":"2010-09-09",
+  "Parameters":{
+    "SubnetId":{
+      "Type":"List<AWS::EC2::Subnet::Id>",
+      "Description":"Select at two subnets in your selected VPC."
+    }
+  },
+  "Resources":{
+    "EasypriceDBSubnetGroup": {
+      "Type" : "AWS::RDS::DBSubnetGroup",
+      "Properties" : {
+        "DBSubnetGroupDescription" : "Easyprice DB Subnet Group",
+        "DBSubnetGroupName" : "EasypriceDBSubnetGroup",
+        "SubnetIds" : { "Ref": "SubnetId" }
+      }
+    },
+    "MyDB" : {
+     "Type" : "AWS::RDS::DBInstance",
+     "Properties" : {
+       "DBSecurityGroups" : [ ],
+       "AllocatedStorage" : "5",
+       "DBInstanceClass" : "db.m4.large",
+       "Engine" : "MySQL",
+       "MasterUsername" : "speckbb",
+       "MasterUserPassword" : "password",
+       "DBSubnetGroupName" : { "Ref": "EasypriceDBSubnetGroup" }
+     },
+     "DeletionPolicy" : "Snapshot"
+    }
+  }
+}
